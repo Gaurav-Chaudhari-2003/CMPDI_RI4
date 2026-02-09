@@ -45,6 +45,13 @@ dev_dependencies:
   json_serializable: ^6.8.0
 
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/cmpdi_ri4_app_logo.png"
+  adaptive_icon_background: "#D1E9F9"
 
 flutter:
   uses-material-design: true
