@@ -25,7 +25,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     super.initState();
 
     // 1. Initialize and play the video
-    _controller = VideoPlayerController.asset('assets/splash_video.mp4')
+    _controller = VideoPlayerController.asset('assets/cmpdi_splash_screen.mp4')
       ..initialize().then((_) {
         if (!mounted) return;
         setState(() {});
