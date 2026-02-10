@@ -15,6 +15,12 @@ The platform follows an **API-only backend architecture** with multiple clients:
   - Flutter mobile application(s)
   - Flutter web application (optional/extended scope)
 
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
+
+
+temp
 All clients communicate exclusively with the backend API. No client accesses the database directly.
 
 ---
