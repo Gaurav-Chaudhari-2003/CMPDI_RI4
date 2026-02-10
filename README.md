@@ -64,6 +64,3 @@ This repository will evolve to include:
 - CI checks must pass before merging
 
 Refer to contribution guidelines (to be added) before submitting changes.
-
-
--- Temp2
