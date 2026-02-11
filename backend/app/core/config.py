@@ -1,16 +1,22 @@
 from pydantic_settings import BaseSettings
+from pydantic import Field, ValidationError
 
 
 class Settings(BaseSettings):
-    APP_NAME: str = "Vehicle Booking API"
-    ENV: str = "development"
-    DEBUG: bool = True
-    HOST: str = "0.0.0.0"
-    PORT: int = 8000
+    # Required
+    APP_NAME: str = Field(..., min_length=1)
+    ENV: str = Field(..., pattern="^(development|staging|production)$")
+    DATABASE_URL: str = Field(..., min_length=1)
+    JWT_SECRET: str = Field(..., min_length=8)
+    JWT_ALGORITHM: str = Field(..., min_length=1)
 
     class Config:
         env_file = ".env"
         case_sensitive = True
 
 
-settings = Settings()
+try:
+    settings = Settings()
+except ValidationError as e:
+    # Fail fast at startup
+    raise RuntimeError(f"Configuration error: {e}")
