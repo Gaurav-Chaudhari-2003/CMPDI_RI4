@@ -1,23 +1,32 @@
+from typing import Any, Optional
 from fastapi.responses import JSONResponse
 
 
-def success_response(data=None, message="Success"):
+def success_response(
+    data: Optional[Any] = None,
+    message: str = "Success",
+    status_code: int = 200,
+) -> JSONResponse:
     return JSONResponse(
-        status_code=200,
+        status_code=status_code,
         content={
             "success": True,
-            "message": message,
             "data": data,
+            "message": message,
         },
     )
 
 
-def error_response(message="Error", status_code=400):
+def error_response(
+    message: str = "Error",
+    status_code: int = 400,
+    data: Optional[Any] = None,
+) -> JSONResponse:
     return JSONResponse(
         status_code=status_code,
         content={
             "success": False,
+            "data": data,
             "message": message,
-            "data": None,
         },
     )
