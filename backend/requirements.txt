@@ -5,3 +5,8 @@ pydantic-settings
 python-multipart
 python-dotenv
 requests
+passlib[bcrypt]
+python-jose[cryptography]
+sqlalchemy
+psycopg2-binary
+alembic
