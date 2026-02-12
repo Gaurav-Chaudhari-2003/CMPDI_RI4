@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-from backend.app.core.config import settings
-from backend.app.core.logging import setup_logging
-from backend.app.api.health import router as health_router
+from app.core.config import settings
+from app.core.logging import setup_logging
+from app.api.health import router as health_router
 
 
 def create_app() -> FastAPI:
