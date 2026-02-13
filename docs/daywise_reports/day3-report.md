@@ -40,7 +40,12 @@ Updated requirements.txt and committed changes.
 
 Created structured DB layer inside app/:
 
-app/ ├── db/ │ ├── base.py │ ├── session.py │ └── models/ │ └── user.py
+    app/
+    ├── db/ │ 
+    ├── base.py │ 
+    ├── session.py │ 
+    └── models/ │ 
+    └── user.py
 
 ### base.py
 

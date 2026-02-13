@@ -88,7 +88,14 @@ app/core/response.py
 
 ### Enforced Response Format
 
-{ "success": true, "data": {}, "message": "" }
+    
+    { 
+    "success": true, 
+    "data":{ 
+    },
+    "message": ""
+    }
+
 
 ### Benefits
 
@@ -122,8 +129,16 @@ GET /api/health
 
 ### Sample Response
 
-{ "success": true, "data": { "status": "UP", "service": "CMPDI RI-4 API"
-}, "message": "Service healthy" }
+    {
+      "success": true,
+      "data": {
+        "status": "UP",
+        "service": "CMPDI RI-4 API"
+      },
+      "message": "Service healthy"
+    }
+
+
 
 ### Characteristics
 
