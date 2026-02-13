@@ -1,28 +1,28 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-from app.db.session import SessionLocal
+from app.db.session import get_db
 from app.db.models.user import User
 from app.core.security import verify_password, create_access_token
-from app.api.deps import get_current_user
-from app.schemas.auth import LoginRequest
+from app.api.dependencies import get_current_user
+
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
 @router.post("/login")
-def login(request: LoginRequest, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.employee_id == request.employee_id).first()
+def login(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db)
+):
+    # OAuth2 uses "username" field → map to employee_id
+    employee_id = form_data.username
+    password = form_data.password
 
-    if not user or not verify_password(request.password, user.password_hash):
+    user = db.query(User).filter(User.employee_id == employee_id).first()
+
+    if not user or not verify_password(password, user.password_hash):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     if user.status != "active":
@@ -30,13 +30,10 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
 
     token = create_access_token(user.id, user.employee_id)
 
+    # IMPORTANT: OAuth2 requires THIS exact response format
     return {
-        "success": True,
-        "data": {
-            "access_token": token,
-            "token_type": "bearer"
-        },
-        "message": "Login successful"
+        "access_token": token,
+        "token_type": "bearer"
     }
 
 
@@ -51,4 +48,3 @@ def get_me(current_user: User = Depends(get_current_user)):
         },
         "message": "User fetched"
     }
-
