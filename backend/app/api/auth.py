@@ -4,8 +4,9 @@ from sqlalchemy.orm import Session
 from app.db.session import SessionLocal
 from app.db.models.user import User
 from app.core.security import verify_password, create_access_token
+from app.api.deps import get_current_user
 
-router = APIRouter(prefix="/api/auth", tags=["Auth"])
+router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
 def get_db():
@@ -29,9 +30,19 @@ def login(employee_id: str, password: str, db: Session = Depends(get_db)):
     if user.status != "active":
         raise HTTPException(status_code=403, detail="User inactive")
 
+    # ✅ correct token generation
     token = create_access_token(user.id, user.employee_id)
 
     return {
         "access_token": token,
         "token_type": "bearer"
+    }
+
+
+@router.get("/me")
+def get_me(current_user: User = Depends(get_current_user)):
+    return {
+        "id": current_user.id,
+        "employee_id": current_user.employee_id,
+        "email": current_user.email
     }
