@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 
-from backend.app.core.config import settings
-from backend.app.core.logging import setup_logging
-from backend.app.api import auth
+from app.core.config import settings
+from app.core.logging import setup_logging
+from app.api import auth
+from app.db.base_class import *  # register models
+
 
 
 def create_app() -> FastAPI:
