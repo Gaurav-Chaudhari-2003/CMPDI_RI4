@@ -1,16 +1,10 @@
 from fastapi import FastAPI
 
-from backend.app.core.config import settings
-from backend.app.core.logging import setup_logging
-from backend.app.api import auth
+from app.core.config import settings
+from app.api import auth
 
 
 def create_app() -> FastAPI:
-    """
-    Application factory.
-    Keeps startup logic clean and testable.
-    """
-    setup_logging()
 
     app = FastAPI(
         title=settings.APP_NAME,
@@ -20,7 +14,6 @@ def create_app() -> FastAPI:
 
     # Register routers
     app.include_router(auth.router, prefix="/api")
-
 
     return app
 

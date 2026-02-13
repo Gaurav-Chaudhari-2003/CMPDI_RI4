@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 import logging
 
-from app.core.response import success_response
-from app.core.config import settings
+from backend.app.core.response import success_response
+from backend.app.core.config import settings
 
 router = APIRouter()
 logger = logging.getLogger(__name__)

@@ -1,4 +1,4 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field, ValidationError
 
 
@@ -10,9 +10,10 @@ class Settings(BaseSettings):
     JWT_SECRET: str = Field(..., min_length=8)
     JWT_ALGORITHM: str = Field(..., min_length=1)
 
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=True
+    )
 
 
 try:
