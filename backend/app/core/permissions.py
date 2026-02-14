@@ -6,6 +6,7 @@ from app.api.dependencies import get_current_user
 from app.db.models.rbac.user_role import UserRole
 from app.db.models.rbac.role_permission import RolePermission
 from app.db.models.rbac.permission import Permission
+from app.core.audit import log_action
 
 
 def require_permission(permission_code: str):
@@ -13,12 +14,22 @@ def require_permission(permission_code: str):
         current_user=Depends(get_current_user),
         db: Session = Depends(get_db),
     ):
-        # Get all roles assigned to user
+        request = current_user._request  # ← SAFE ACCESS
+
         user_roles = db.query(UserRole.role_id).filter(
             UserRole.user_id == current_user.id
         ).all()
 
         if not user_roles:
+
+            log_action(
+                action="PERMISSION_DENIED",
+                user_id=current_user.id,
+                entity_type="rbac",
+                description=f"No roles assigned. Attempted permission: {permission_code}",
+                request=request,
+            )
+
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="No roles assigned",
@@ -26,7 +37,6 @@ def require_permission(permission_code: str):
 
         role_ids = [r.role_id for r in user_roles]
 
-        # Get permissions linked to these roles
         permission = (
             db.query(Permission)
             .join(RolePermission, Permission.id == RolePermission.permission_id)
@@ -38,6 +48,15 @@ def require_permission(permission_code: str):
         )
 
         if not permission:
+
+            log_action(
+                action="PERMISSION_DENIED",
+                user_id=current_user.id,
+                entity_type="rbac",
+                description=f"User attempted unauthorized permission: {permission_code}",
+                request=request,
+            )
+
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Permission denied",
